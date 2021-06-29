@@ -1,17 +1,16 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Calculator/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Calculator from './components/Calculator.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Calculator
   }
 }
 </script>
@@ -24,5 +23,27 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  border: 3px black solid;
+  border-radius: 5px;
+}
+
+@media (max-width:699px){
+  #app {
+    width: 94%;
+    margin-left:3%;
+  }
+  .numbers, .actions{
+    width: 100%;
+  }
+}
+
+@media (min-width:700px){
+  #app {
+    width: 70%;
+    margin-left: 15%;
+  }
+  .numbers, .actions{
+    width: 50%;
+  }
 }
 </style>
