@@ -78,6 +78,7 @@ export default {
             return this.evaluation.substr(-1);
         },
         penultimateInput(){
+            if (this.evaluation.length<2) return '+';
             return this.evaluation.substr(-2,1);
         },
         cursorToTheEnd(){
@@ -109,17 +110,16 @@ export default {
               && this.Actions.includes(this.penultimateInput()) && button !='.' ){
                 this.evaluation = this.evaluation.slice(0,-1) + button;
             }
-            else if ( ((this.Actions.includes(this.lastInput())/* && button != '0'*/)
+            else if ( ((this.Actions.includes(this.lastInput()))
               || ( !this.Actions.includes(this.lastInput())))
               && !( ( this.Numbers.includes(this.lastInput()) && button == '(' )
               || ( this.Actions.includes(this.lastInput()) && button == ')' )
               || (this.lastInput() == '(' && this.Actions.includes(button) ) ) ) this.evaluation += button;
             
-            if (/*this.evaluation == '0' ||*/ button.toUpperCase() == 'C') this.evaluation='';
+            if (button.toUpperCase() == 'C') this.evaluation='';
             this.clearInputField();
         },
         historyClick(){
-            //console.log(this.evaluationsHistory);
             this.ToggleHistoryList(this.historyActive? false : true);
         },
         moveToEvaluationLine(clickEvent){
@@ -150,7 +150,6 @@ input[type=text]{
 .result{
     width: 100%;
     background-color: cadetblue;
-    /*border: 1px cadetblue solid;*/
     border-radius: 5px;
     display: inline-block;
 }
