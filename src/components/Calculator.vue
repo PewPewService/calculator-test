@@ -142,6 +142,9 @@ input[type=text]{
     outline: none;
     background-color: cadetblue;
 }
+input[type=button]{
+    cursor: pointer;
+}
 .resultLine{
     cursor:default;
     border-bottom: 0.1rem black solid !important;
