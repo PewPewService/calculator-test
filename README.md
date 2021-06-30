@@ -1,24 +1,11 @@
-# 28.06calculator
+# calculator-test
 
-## Project setup
+## heroku
 ```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
+https://maa-calculator.herokuapp.com/
 ```
 
-### Compiles and minifies for production
+## netlify
 ```
-npm run build
+https://quirky-jepsen-d7097c.netlify.app/
 ```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
