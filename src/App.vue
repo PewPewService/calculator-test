@@ -1,16 +1,32 @@
 <template>
   <div id="app">
     <Calculator/>
+    <!-- <Result/>
+    <Buttons/> -->
   </div>
 </template>
 
 <script>
-import Calculator from './components/Calculator.vue'
+import { mapActions } from 'vuex';
+import Calculator from './components/Calculator.vue';
+/*import Result from './components/Result.vue';
+import Buttons from './components/Buttons.vue'; */
 
 export default {
   name: 'App',
   components: {
-    Calculator
+    Calculator,
+    /*Result,
+    Buttons*/
+  },
+  methods: {
+    ...mapActions(['ToggleHistoryList']),
+  },
+  created(){
+    document.addEventListener('click', (evt) =>
+    {
+      if (!evt.target.classList.contains("dontCloseHistory")) this.ToggleHistoryList(true);
+    });
   }
 }
 </script>
@@ -25,12 +41,13 @@ export default {
   margin-top: 60px;
   border: 3px black solid;
   border-radius: 5px;
+  z-index: 10;
 }
 
 @media (max-width:699px){
   #app {
-    width: 94%;
-    margin-left:3%;
+    width: 80%;
+    margin-left:10%;
   }
   .numbers, .actions{
     width: 100%;
@@ -39,8 +56,8 @@ export default {
 
 @media (min-width:700px){
   #app {
-    width: 70%;
-    margin-left: 15%;
+    width: 60%;
+    margin-left: 20%;
   }
   .numbers, .actions{
     width: 50%;
