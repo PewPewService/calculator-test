@@ -1,27 +1,78 @@
 <template>
-  <div class="calculator">
-      <div class="historyList dontCloseHistory" :hidden="this.historyActive">
-          <input type="button" class="historyButton dontCloseHistory" @click="historyClick">
-          <p :hidden="this.evaluationsHistory.length>0" class="dontCloseHistory">
-              Your calculations and results appear here so that you can reuse them
+  <div>
+      <div 
+        class="HistoryList HistoryListDontClose" 
+        :hidden="this.historyActive"
+      >
+          <input
+            type="button"
+            class="HistoryButton HistoryListDontClose"
+            @click="historyClick"
+          >
+          <p
+            :hidden="this.evaluationsHistory.length>0"
+            class="HistoryListDontClose HistoryListEmpty"
+          >
+              Your calculations and results appear here so that you can reuse them.
           </p>
-          <p class="dontCloseHistory historyElement" v-for="result in this.evaluationsHistory" :key="result[0]+result[1]">
-              <span class="clickable" @click="moveToEvaluationLine">{{result[0]}}</span>
+          <p
+            class="HistoryListDontClose"
+            v-for="result in this.evaluationsHistory"
+            :key="result[0]+result[1]"
+          >
+              <span
+                class="HistoryListClickable"
+                @click="moveToEvaluationLine"
+              > 
+                {{result[0]}}
+              </span>
               = 
-              <span class="clickable" @click="moveToEvaluationLine">{{result[1]}}</span>
+              <span
+                class="HistoryListClickable"
+                @click="moveToEvaluationLine"
+              >
+                {{result[1]}}
+              </span>
           </p>
       </div>
-      <div class="result">
-          <input type="button" :hidden="!this.historyActive" class="historyButton dontCloseHistory" @click="historyClick">
-          <input type="text" class="resultLine" readonly :value="result">
-          <input type="text" class="evaluationLine" ref="input" @keyup="buttonPress">
+      <div class="Result">
+          <input
+            type="button"
+            :hidden="!this.historyActive"
+            class="HistoryButton HistoryListDontClose"
+            @click="historyClick"
+          >
+          <input
+            type="text"
+            class="ResultLine"
+            readonly
+            :value="result"
+          >
+          <input
+            type="text"
+            ref="input"
+            @keyup="buttonPress"
+          >
       </div>
-      <div class="buttons">
-          <div class="numbers">
-            <input type="button" class="button button_numbers" @click="buttonClick" v-for="number in Numbers" :key="number" :value="number">
+      <div>
+          <div class="Numbers">
+            <input
+              type="button"
+              class="Button NumbersButton"
+              @click="buttonClick"
+              v-for="number in Numbers"
+              :key="number"
+              :value="number"
+            >
           </div>
-          <div class="actions">
-            <input type="button" class="button button_actions" @click="buttonClick" v-for="action in Actions.concat(Brackets)" :key="action" :value="action">
+          <div class="Actions">
+            <input type="button"
+              class="Button ActionsButton"
+              @click="buttonClick"
+              v-for="action in Actions.concat(Brackets)"
+              :key="action"
+              :value="action"
+            >
           </div>
       </div>
   </div>
@@ -31,7 +82,7 @@
 import { mapGetters, mapActions } from "vuex";
 
 export default {
-    name: "Calculator",
+    name: "CalculatorItem",
     data(){
         return{
             Numbers : ['7', '8', '9', '4', '5', '6', '1', '2', '3', '.', '0'],
@@ -42,13 +93,16 @@ export default {
             history: {},
         }
     },
+
     computed: {
         ...mapGetters(['evaluationsHistory']),
         ...mapGetters(['historyActive']),
     },
+
     methods: {
         ...mapActions(['CalcEvaluate']),
         ...mapActions(['ToggleHistoryList']),
+
         showAnswer(){
             let OpeningBrackets = this.evaluation.match(/\(/g)? this.evaluation.match(/\(/g).length : 0;
             let ClosingBrackets = this.evaluation.match(/\)/g)? this.evaluation.match(/\(/g).length : 0;
@@ -74,29 +128,36 @@ export default {
             }
             this.evaluation = '';
         },
+
         lastInput(){
             return this.evaluation.substr(-1);
         },
+
         penultimateInput(){
             if (this.evaluation.length<2) return '+';
             return this.evaluation.substr(-2,1);
         },
+
         cursorToTheEnd(){
             this.$refs.input.focus();
             this.$refs.input.selectionStart = this.$refs.input.value.length;
         },
+
         clearInputField(){
             this.$refs.input.value=this.evaluation;
         },
+
         buttonClick(clickEvent){
             this.HandlePress(clickEvent.target.value);
         },
+
         buttonPress(button){
             this.cursorToTheEnd();
             if (this.Numbers.includes(button.key) || this.Actions.includes(button.key.toUpperCase()) || this.Brackets.includes(button.key)
               || button.key == 'Backspace' || button.key == 'Enter') this.HandlePress(button.key);
             else this.clearInputField();
         },
+
         HandlePress(button){
             if (button == '=' || button == "Enter"){
                 this.showAnswer();
@@ -119,9 +180,11 @@ export default {
             if (button.toUpperCase() == 'C') this.evaluation='';
             this.clearInputField();
         },
+
         historyClick(){
             this.ToggleHistoryList(this.historyActive? false : true);
         },
+
         moveToEvaluationLine(clickEvent){
             this.evaluation = clickEvent.target.innerHTML;
             this.clearInputField();
@@ -130,7 +193,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 input[type=text]{
     margin-right: 0.5rem;
     float: right;
@@ -142,21 +205,26 @@ input[type=text]{
     outline: none;
     background-color: cadetblue;
 }
+
 input[type=button]{
     cursor: pointer;
 }
-.resultLine{
+
+.ResultLine{
     cursor:default;
     border-bottom: 0.1rem black solid !important;
     margin-bottom: 0.4rem;
 }
-.result{
+
+.Result{
     width: 100%;
     background-color: cadetblue;
     border-radius: 5px;
     display: inline-block;
 }
-.historyButton{
+
+
+.HistoryButton{
     width: 1.5rem;
     height: 1.5rem;
     float: left;
@@ -166,13 +234,16 @@ input[type=button]{
     border: none;
     background-color: unset;
 }
-.historyButton:hover{
+
+.HistoryButton:hover{
     filter: invert(100%);
 }
-.historyList .historyButton{
+
+.HistoryList .HistoryButton{
     float: none;
 }
-.historyList{
+
+.HistoryList{
     text-align: left;
     width: 40%;
     max-height: 50%;
@@ -186,34 +257,11 @@ input[type=button]{
     overflow: auto;
 }
 
-.button{    
-    height: 2rem;
-    margin: 5px 5px;
-    font-size: 1rem;
-    border: 1px black;
-    border-radius: 5px;
-    flex: 27%;
+.HistoryListEmpty{
+    text-align: center;
 }
 
-.button_numbers{
-    color: whitesmoke;
-    background-color: teal;
-}
-.button_numbers:hover{
-    background-color:rgb(22, 198, 204);
-}
-.button_actions{
-    color: black;
-    background-color: orange;
-}
-.button_actions:hover{
-    background-color:rgb(228, 207, 23)
-}
-.numbers, .actions{
-    display: inline-flex;
-    flex-wrap: wrap;
-}
-.clickable{
+.HistoryListClickable{
     display: inline-block;
     background-color:inherit;
     border: 2px solid gray;
@@ -228,7 +276,41 @@ input[type=button]{
     white-space: nowrap;
     vertical-align: middle;
 }
-.clickable:hover{
+
+.HistoryListClickable:hover{
     background-color: honeydew;
+}
+
+
+.Button{    
+    height: 2rem;
+    margin: 5px 5px;
+    font-size: 1rem;
+    border: 1px black;
+    border-radius: 5px;
+    flex: 27%;
+}
+
+.NumbersButton{
+    color: whitesmoke;
+    background-color: teal;
+}
+
+.NumbersButton:hover{
+    background-color:rgb(22, 198, 204);
+}
+
+.ActionsButton{
+    color: black;
+    background-color: orange;
+}
+
+.ActionsButton:hover{
+    background-color:rgb(228, 207, 23)
+}
+
+.Numbers, .Actions{
+    display: inline-flex;
+    flex-wrap: wrap;
 }
 </style>

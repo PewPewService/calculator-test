@@ -1,32 +1,26 @@
 <template>
   <div id="app">
-    <Calculator/>
-    <!-- <Result/>
-    <Buttons/> -->
+    <CalculatorItem/>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
-import Calculator from './components/Calculator.vue';
-/*import Result from './components/Result.vue';
-import Buttons from './components/Buttons.vue'; */
+import CalculatorItem from './components/CalculatorItem.vue';
 
 export default {
   name: 'App',
   components: {
-    Calculator,
-    /*Result,
-    Buttons*/
-  },
-  methods: {
-    ...mapActions(['ToggleHistoryList']),
+    CalculatorItem,
   },
   created(){
     document.addEventListener('click', (evt) =>
     {
-      if (!evt.target.classList.contains("dontCloseHistory")) this.ToggleHistoryList(true);
+      if (!evt.target.classList.contains("HistoryListDontClose")) this.ToggleHistoryList(true);
     });
+  },
+  methods: {
+    ...mapActions(['ToggleHistoryList']),
   }
 }
 </script>
