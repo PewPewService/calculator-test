@@ -80,6 +80,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import { actionTypes, getterTypes, moduleName } from '../store/modules/calculations' 
 
 export default {
     name: "CalculatorItem",
@@ -95,17 +96,35 @@ export default {
     },
 
     computed: {
-        ...mapGetters(['evaluationsHistory']),
-        ...mapGetters(['historyActive']),
+        ...mapGetters(moduleName, [
+            getterTypes.GETTER_EVALUATIONS_HISTORY,
+            getterTypes.GETTER_ACTIVE_HISTORY
+        ]),
+        evaluationsHistory(){
+            return this[getterTypes.GETTER_EVALUATIONS_HISTORY];
+        },
+        historyActive(){
+           return this[getterTypes.GETTER_ACTIVE_HISTORY];
+        },
     },
 
     methods: {
-        ...mapActions(['CalcEvaluate']),
-        ...mapActions(['ToggleHistoryList']),
+        ...mapActions(moduleName, [
+            actionTypes.ACTION_TOGGLE_HISTORY_LIST,
+            actionTypes.ACTION_CALCULATE_EVALUATION
+        ]),
+
+        CalcEvaluate(SendingResult){
+            this[actionTypes.ACTION_CALCULATE_EVALUATION](SendingResult);
+        },
+
+        ToggleHistoryList(visibility){
+            this[actionTypes.ACTION_TOGGLE_HISTORY_LIST](visibility);
+        },
 
         showAnswer(){
             let OpeningBrackets = this.evaluation.match(/\(/g)? this.evaluation.match(/\(/g).length : 0;
-            let ClosingBrackets = this.evaluation.match(/\)/g)? this.evaluation.match(/\(/g).length : 0;
+            let ClosingBrackets = this.evaluation.match(/\)/g)? this.evaluation.match(/\)/g).length : 0;
             let BracketsDifference = OpeningBrackets - ClosingBrackets;
             if (BracketsDifference > 0) {
                 for (let i = 0; i < BracketsDifference; i++)
@@ -246,7 +265,7 @@ input[type=button]{
 .HistoryList{
     text-align: left;
     width: 40%;
-    max-height: 50%;
+    max-height: 16rem;
     padding: 0.5rem;
     background-color: gainsboro;
     font-size: 1rem;

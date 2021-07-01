@@ -6,6 +6,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import { actionTypes, moduleName } from './store/modules/calculations' ;
 import CalculatorItem from './components/CalculatorItem.vue';
 
 export default {
@@ -20,7 +21,12 @@ export default {
     });
   },
   methods: {
-    ...mapActions(['ToggleHistoryList']),
+    ...mapActions(moduleName, [
+      actionTypes.ACTION_TOGGLE_HISTORY_LIST
+    ]),
+    ToggleHistoryList(visibility) {
+      return this[actionTypes.ACTION_TOGGLE_HISTORY_LIST](visibility);
+    }
   }
 }
 </script>
